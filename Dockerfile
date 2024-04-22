@@ -1,5 +1,5 @@
 # Use an Ubuntu base image
-FROM ubuntu:20.04
+FROM ubuntu:latest
 
 # Avoiding user interaction with tzdata
 ENV DEBIAN_FRONTEND=noninteractive
