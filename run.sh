@@ -1,5 +1,7 @@
 #!/bin/bash
-xhost +local:root  # Allow local root to access X11 display
+export DISPLAY=:0  # Make sure to set the DISPLAY variable correctly
+
+xhost +si:localuser:root  # Allow root access to the X server
 
 docker run -it --rm \
   -e DISPLAY=$DISPLAY \
@@ -7,4 +9,5 @@ docker run -it --rm \
   -e XDG_RUNTIME_DIR=/tmp \
   yt-video-player
 
-xhost -local:root  # Restrict X11 access again
+xhost -si:localuser:root  # Remove root access from the X server after you're done
+S
