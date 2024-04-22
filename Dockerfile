@@ -30,4 +30,7 @@ RUN chmod +x /usr/local/bin/yt-play.sh \
 RUN ls -lah /usr/local/bin/ \
     && head -n 1 /usr/local/bin/yt-play.sh
 
-CMD ["/usr/local/bin/yt-play.sh"]
+# Set the entrypoint to the script
+# ENTRYPOINT ["/usr/local/bin/yt-play.sh"]
+
+CMD ["/bin/sh"] # Start a shell if no specific command is provided
