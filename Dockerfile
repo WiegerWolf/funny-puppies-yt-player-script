@@ -1,16 +1,15 @@
-# Use an Ubuntu base image
-FROM ubuntu:latest
+# Use Alpine Linux as the base image
+FROM alpine:latest
 
-# Avoiding user interaction with tzdata
-ENV DEBIAN_FRONTEND=noninteractive
-
-# Update and install necessary packages
-RUN apt-get update && apt-get install -y \
+# Install necessary packages
+RUN apk add --no-cache \
     curl \
     jq \
     mpv \
-    yt-dlp \
-    && rm -rf /var/lib/apt/lists/*
+    python3 \
+    py3-pip \
+    ffmpeg \
+    && pip3 install --upgrade yt-dlp
 
 # Copy the script into the container
 COPY yt-play.sh /usr/local/bin/yt-play.sh
@@ -18,11 +17,11 @@ COPY yt-play.sh /usr/local/bin/yt-play.sh
 # Make sure the script is executable
 RUN chmod +x /usr/local/bin/yt-play.sh
 
-# Setup for debugging
-RUN echo "alias ls='ls --color=auto'" >> ~/.bashrc # Improve shell usability
-RUN echo "set -o vi" >> ~/.bashrc # If you prefer Vi key bindings in bash
+# Ensure mpv uses yt-dlp
+RUN echo "ytdl-raw-options=source-address=0.0.0.0" > /etc/mpv/mpv.conf
+RUN echo "script-opts=ytdl_hook-ytdl_path=yt-dlp" >> /etc/mpv/mpv.conf
 
 # Set the entrypoint to the script
-# ENTRYPOINT ["/usr/local/bin/yt-play.sh"] # Comment out to use interactive shell
+# ENTRYPOINT ["/usr/local/bin/yt-play.sh"]
 
-CMD ["/bin/bash"] # Start a shell if no specific command is provided
+CMD ["/bin/sh"] # Start a shell if no specific command is provided
