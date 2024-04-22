@@ -18,5 +18,11 @@ COPY yt-play.sh /usr/local/bin/yt-play.sh
 # Make sure the script is executable
 RUN chmod +x /usr/local/bin/yt-play.sh
 
+# Setup for debugging
+RUN echo "alias ls='ls --color=auto'" >> ~/.bashrc # Improve shell usability
+RUN echo "set -o vi" >> ~/.bashrc # If you prefer Vi key bindings in bash
+
 # Set the entrypoint to the script
-ENTRYPOINT ["/usr/local/bin/yt-play.sh"]
+# ENTRYPOINT ["/usr/local/bin/yt-play.sh"] # Comment out to use interactive shell
+
+CMD ["/bin/bash"] # Start a shell if no specific command is provided
