@@ -1,4 +1,3 @@
-# Use Alpine Linux as the base image
 FROM alpine:latest
 
 # Install necessary packages including Python and its tools
@@ -8,7 +7,8 @@ RUN apk add --no-cache \
     mpv \
     python3 \
     py3-pip \
-    ffmpeg
+    ffmpeg \
+    bash  # Add bash if your script uses bash-specific features
 
 # Setup Python virtual environment
 RUN python3 -m venv /opt/venv
@@ -21,14 +21,13 @@ RUN pip install --upgrade pip \
 # Ensure mpv uses yt-dlp from the virtual environment
 RUN echo "script-opts=ytdl_hook-ytdl_path=/opt/venv/bin/yt-dlp" > /etc/mpv/mpv.conf
 
-# Copy the script into the container
+# Copy and prepare the script
 COPY yt-play.sh /usr/local/bin/yt-play.sh
+RUN chmod +x /usr/local/bin/yt-play.sh \
+    && sed -i 's/\r$//' /usr/local/bin/yt-play.sh  # Remove carriage return characters
 
-# Make sure the script is executable
-RUN chmod +x /usr/local/bin/yt-play.sh
+# Verify that the script is correctly formatted and executable
+RUN ls -lah /usr/local/bin/ \
+    && head -n 1 /usr/local/bin/yt-play.sh
 
-# Debug: List files in /usr/local/bin to verify
-RUN ls -lah /usr/local/bin/
-
-# Set the entrypoint to the script
 CMD ["/usr/local/bin/yt-play.sh"]
