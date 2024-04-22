@@ -1,6 +1,12 @@
 #!/bin/bash
 
-# Run the Docker container with appropriate settings
+# Set the DISPLAY variable for graphical output
+#export DISPLAY=:0
+
+# Grant access to the X server for root (common for Docker containers running GUI apps)
+xhost +SI:localuser:root
+
+# Run the Docker container
 docker run -it --rm \
   -e DISPLAY=$DISPLAY \
   -v /tmp/.X11-unix:/tmp/.X11-unix \
@@ -10,3 +16,6 @@ docker run -it --rm \
   -e XDG_RUNTIME_DIR=/tmp \
   --network host \
   yt-video-player
+
+# Restrict X server access after the container stops
+xhost -SI:localuser:root
