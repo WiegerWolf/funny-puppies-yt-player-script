@@ -1,14 +1,25 @@
-FROM alpine:latest
+# Use Ubuntu as the base image
+FROM ubuntu:latest
 
-# Install necessary packages including Python and its tools
-RUN apk add --no-cache \
+# Avoid timezone prompts
+ARG DEBIAN_FRONTEND=noninteractive
+
+# Update and install necessary packages including Python and its tools
+RUN apt-get update && apt-get install -y \
     curl \
     jq \
     mpv \
     python3 \
-    py3-pip \
+    python3-pip \
     ffmpeg \
-    bash  # Add bash if your script uses bash-specific features
+    bash \
+    libegl1-mesa \
+    libgl1-mesa-glx \
+    libxext6 \
+    libxrender1 \
+    libxtst6 \
+    pulseaudio \
+    alsa-utils
 
 # Setup Python virtual environment
 RUN python3 -m venv /opt/venv
@@ -24,7 +35,7 @@ RUN echo "script-opts=ytdl_hook-ytdl_path=/opt/venv/bin/yt-dlp" > /etc/mpv/mpv.c
 # Copy and prepare the script
 COPY yt-play.sh /usr/local/bin/yt-play.sh
 RUN chmod +x /usr/local/bin/yt-play.sh \
-    && sed -i 's/\r$//' /usr/local/bin/yt-play.sh  # Remove carriage return characters
+    && sed -i 's/\r//g' /usr/local/bin/yt-play.sh  # Remove carriage return characters
 
 # Verify that the script is correctly formatted and executable
 RUN ls -lah /usr/local/bin/ \
@@ -33,4 +44,4 @@ RUN ls -lah /usr/local/bin/ \
 # Set the entrypoint to the script
 # ENTRYPOINT ["/usr/local/bin/yt-play.sh"]
 
-CMD ["/bin/sh"] # Start a shell if no specific command is provided
+CMD ["/bin/bash"] # Start a shell if no specific command is provided
