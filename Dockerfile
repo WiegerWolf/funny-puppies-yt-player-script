@@ -27,5 +27,8 @@ COPY yt-play.sh /usr/local/bin/yt-play.sh
 # Make sure the script is executable
 RUN chmod +x /usr/local/bin/yt-play.sh
 
+# Debug: List files in /usr/local/bin to verify
+RUN ls -lah /usr/local/bin/
+
 # Set the entrypoint to the script
 CMD ["/usr/local/bin/yt-play.sh"]
