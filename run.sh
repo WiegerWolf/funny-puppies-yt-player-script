@@ -1,6 +1,4 @@
 #!/bin/bash
-# Set the DISPLAY variable correctly
-export DISPLAY=:0
 
 # Allow root access to the X server
 xhost +si:localuser:root
