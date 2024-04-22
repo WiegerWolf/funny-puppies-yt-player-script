@@ -11,8 +11,5 @@ docker build -t yt-video-player .
 Running the container can be tricky due to the need for X11 display for mpv. If you're running on a Linux host and want to try displaying the GUI, you can pass the X11 display socket and environment variable like this:
 
 ```bash
-docker run -it --rm \
-  -e DISPLAY=$DISPLAY \
-  -v /tmp/.X11-unix:/tmp/.X11-unix \
-  yt-video-player
+./run.sh
 ```
